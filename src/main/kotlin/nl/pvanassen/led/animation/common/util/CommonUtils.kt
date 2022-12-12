@@ -1,4 +1,4 @@
-package nl.pvanassen.christmas.tree.animation.common.util
+package nl.pvanassen.led.animation.common.util
 
 import java.util.*
 

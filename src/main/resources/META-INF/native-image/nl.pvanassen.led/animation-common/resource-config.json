@@ -1,0 +1,35 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "\\QMETA-INF/services/kotlin.reflect.jvm.internal.impl.resolve.ExternalOverridabilityCondition\\E"
+      },
+      {
+        "pattern": "\\Qapplication.yaml\\E"
+      },
+      {
+        "pattern": "\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"
+      },
+      {
+        "pattern": ".*kotlin_builtins"
+      },
+      {
+        "pattern": ".*png"
+      },
+      {
+        "pattern": "\\Qlogback.xml\\E"
+      },
+      {
+        "pattern": "META-INF/services/.*"
+      }
+    ]
+  },
+  "bundles": [
+    {
+      "name": "sun.awt.resources.awt",
+      "classNames": [
+        "sun.awt.resources.awt"
+      ]
+    }
+  ]
+}

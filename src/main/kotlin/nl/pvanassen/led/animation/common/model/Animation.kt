@@ -1,4 +1,4 @@
-package nl.pvanassen.christmas.tree.animation.common.model
+package nl.pvanassen.led.animation.common.model
 
 interface Animation<T> {
 
