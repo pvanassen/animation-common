@@ -1,3 +1,3 @@
-# Christmas tree animation common
+# LED animation common
 
 Utility class for shared stuff. Not microservice oriented
