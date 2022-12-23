@@ -40,9 +40,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:https://github.com/pvanassen/animation-fire.git</connection>
-        <developerConnection>scm:git:https://github.com/pvanassen/animation-fire.git</developerConnection>
-        <url>https://github.com/pvanassen/animation-fire</url>
+        <connection>scm:git:https://github.com/pvanassen/animation-common.git</connection>
+        <developerConnection>scm:git:https://github.com/pvanassen/animation-common.git</developerConnection>
+        <url>https://github.com/pvanassen/animation-common</url>
     </scm>
 
     <pluginRepositories>
@@ -102,6 +102,27 @@
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-config-yaml-jvm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-client-core-jvm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-client-cio-jvm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-client-websockets-jvm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-serialization-kotlinx-json-jvm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-serialization-core-jvm</artifactId>
+            <version>1.4.1</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -189,6 +210,18 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <compilerPlugins>
+                        <plugin>kotlinx-serialization</plugin>
+                    </compilerPlugins>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-serialization</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

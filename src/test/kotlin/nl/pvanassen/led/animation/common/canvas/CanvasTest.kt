@@ -8,12 +8,13 @@ import javax.imageio.ImageIO
 
 
 internal class CanvasTest {
-    private val canvas = Canvas(16, 60)
+    private val matrix = (0 until 16).map { 60 }
+    private val canvas = Canvas(ImageIO.read(Canvas::class.java.getResourceAsStream("/mask-16-60.png")), matrix)
 
     @Test
     fun testCanvasWhiteBackBlackPixels() {
         val mask: BufferedImage = ImageIO.read(Canvas::class.java.getResourceAsStream("/test-mask1-16-60.png"))
-        canvas.canvas.graphics.drawImage(mask, 0, 0, null)
+        canvas.drawImage(mask)
         val lightStrips = canvas.getValues()
         assertThat(lightStrips).isNotEmpty
         lightStrips.forEach { assertThat(it).isEqualTo(0.toByte()) }
@@ -22,7 +23,7 @@ internal class CanvasTest {
     @Test
     fun testCanvasWhiteBackRedixels() {
         val mask: BufferedImage = ImageIO.read(Canvas::class.java.getResourceAsStream("/test-mask2-16-60.png"))
-        canvas.canvas.graphics.drawImage(mask, 0, 0, null)
+        canvas.drawImage(mask)
         val lightStrips = canvas.getValues()
         (lightStrips.indices step 3).forEach {
             val red = lightStrips[it].toInt() and 0xFF
@@ -30,6 +31,5 @@ internal class CanvasTest {
             val blue = lightStrips[it + 2].toInt() and 0xFF
             assertThat(Color(red, green, blue).red).isEqualTo(255).overridingErrorMessage("Pos: $it")
         }
-
     }
 }

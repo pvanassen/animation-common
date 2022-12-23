@@ -7,15 +7,14 @@ import kotlin.math.max
 /**
  * Canvas class to draw pixels with
  */
-public class Canvas(private val strips: Int, private val ledsPerStrip: Int) {
+class Canvas(private val mask: BufferedImage,
+             private val pixels: List<Int>) {
 
-    private val mask: BufferedImage =
-        ImageIO.read(Canvas::class.java.getResourceAsStream("/mask-$strips-$ledsPerStrip.png"))
-    val canvas: BufferedImage
+    private val canvas: BufferedImage = BufferedImage(mask.width, mask.height, BufferedImage.TYPE_INT_RGB)
+    private val totalPixels = pixels.sum()
     private val positions: Positions
 
     init {
-        canvas = BufferedImage(mask.width, mask.height, BufferedImage.TYPE_INT_RGB)
         // getRGB returns int in TYPE_INT_ARGB
         val positionsList = (0 until mask.width)
             .flatMap { x ->
@@ -24,23 +23,24 @@ public class Canvas(private val strips: Int, private val ledsPerStrip: Int) {
             }
             .filter { it.third != 0 }
             .map { Position(it.third shr 16 and 0xFF, it.third and 0xFF, it.first, it.second) }
-        positions = Positions(positionsList, strips, ledsPerStrip)
+        positions = Positions(positionsList, pixels)
     }
 
     fun getValues(): ByteArray {
-        val values = ByteArray((strips * ledsPerStrip * 3))
-        for (strip in 0 until strips) {
-            for (pixel in 0 until ledsPerStrip) {
+        var base = 0
+        val values = ByteArray((totalPixels * 3))
+        for (strip in pixels.indices) {
+            for (pixel in 0 until pixels[strip]) {
                 val x = positions.getX(strip, pixel)
                 val y = positions.getY(strip, pixel)
                 val color = canvas.getRGB(x, y)
                 val red: Byte = (color shr 16 and 0xFF).toByte()
                 val green: Byte = (color shr 8 and 0xFF).toByte()
                 val blue: Byte = (color and 0xFF).toByte()
-                val base = (strip * ledsPerStrip * 3) + pixel * 3
                 values[base] = red
                 values[base + 1] = green
                 values[base + 2] = blue
+                base += 3
             }
         }
         return values
@@ -52,9 +52,13 @@ public class Canvas(private val strips: Int, private val ledsPerStrip: Int) {
         canvas.setRGB(x, y, color)
     }
 
+    fun setRGB(x: Int, y: Int, rgb: Int) {
+        canvas.setRGB(x, y, rgb)
+    }
+
     fun setImage(offsetX: Int, offsetY: Int, image: BufferedImage, outOfBoundsBlack: Boolean = true) {
-        for (strip in 0 until strips) {
-            for (pixel in 0 until ledsPerStrip) {
+        for (strip in pixels.indices) {
+            for (pixel in 0 until pixels[strip]) {
                 val x = positions.getX(strip, pixel) + offsetX
                 val y = positions.getY(strip, pixel) + offsetY
                 val color = if ((x >= image.width || y >= image.height) && outOfBoundsBlack) {
@@ -67,18 +71,25 @@ public class Canvas(private val strips: Int, private val ledsPerStrip: Int) {
         }
     }
 
-    private class Positions(private val positions: List<Position>, strips: Int, pixels: Int) {
+    fun drawImage(mask: BufferedImage) {
+        canvas.graphics.drawImage(mask, 0, 0, null)
+    }
+
+    fun getWidth() = canvas.width
+
+    fun getHeight() = canvas.height
+
+    private class Positions(private val positions: List<Position>, pixelStrips: List<Int>) {
 
         private val raster: Array<Array<Position>>
 
         init {
-            raster = (0..strips).map { strip ->
-                positions
-                    .filter { it -> it.strip == strip }
+            raster = (0..pixelStrips.size).map { strip ->
+                Pair(strip, positions.filter { it -> it.strip == strip })
             }
                 .map { stripPositions ->
-                    stripPositions
-                        .filter { it.pixel in (0..pixels) }
+                    stripPositions.second
+                        .filter { it.pixel in (0..pixelStrips[stripPositions.first]) }
                         .sortedBy { it.pixel }
                         .toTypedArray()
                 }.toTypedArray()
