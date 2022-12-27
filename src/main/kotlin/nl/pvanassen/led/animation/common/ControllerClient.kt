@@ -57,9 +57,15 @@ class ControllerClient(private val controllerHost: String,
         } else if (type == "request-animation") {
             val requestAnimation = json.decodeFromString<Message<RequestAnimation>>(text.readText())
             endpoint?.let {
-                val frames = it.animate(requestAnimation.payload.fps, requestAnimation.payload.seconds)
+                try {
+                    val frames = it.animate(requestAnimation.payload.fps, requestAnimation.payload.seconds)
                         .reduce { acc, value -> acc + value }
-                session.send(frames)
+                    session.send(frames)
+                }
+                catch (e: Exception) {
+                    log.warn("Error sending frame", e)
+                    throw e
+                }
             }
         }
     }
