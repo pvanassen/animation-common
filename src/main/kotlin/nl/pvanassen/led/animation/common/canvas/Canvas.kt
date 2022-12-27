@@ -1,7 +1,7 @@
 package nl.pvanassen.led.animation.common.canvas
 
+import java.awt.Image
 import java.awt.image.BufferedImage
-import javax.imageio.ImageIO
 import kotlin.math.max
 
 /**
@@ -71,8 +71,8 @@ class Canvas(private val mask: BufferedImage,
         }
     }
 
-    fun drawImage(mask: BufferedImage) {
-        canvas.graphics.drawImage(mask, 0, 0, null)
+    fun drawImage(img: Image) {
+        canvas.graphics.drawImage(img, 0, 0, null)
     }
 
     fun getWidth() = canvas.width
