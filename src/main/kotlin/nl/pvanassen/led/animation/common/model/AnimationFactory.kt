@@ -10,4 +10,6 @@ interface AnimationFactory<T> {
     ): Animation<T>
 
     fun getRegistrationInfo(): Registration
+
+    fun getRegistrationInfo(config: ApplicationConfig) = getRegistrationInfo()
 }
