@@ -83,7 +83,7 @@ class ControllerClient(private val controllerHost: String,
             val requestAnimation = json.decodeFromString<Message<RequestAnimation>>(text.readText())
             endpoint?.let {
                 try {
-                    val frames = it.animate(requestAnimation.payload.fps, requestAnimation.payload.seconds)
+                    val frames = it.animate(requestAnimation.payload.seconds, requestAnimation.payload.fps)
                         .reduce { acc, value -> acc + value }
                     session.send(frames)
                 }
