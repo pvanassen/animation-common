@@ -5,13 +5,17 @@ import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.*
 import io.ktor.websocket.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.reduce
+import kotlinx.coroutines.isActive
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import nl.pvanassen.led.animation.common.canvas.Canvas
 import nl.pvanassen.led.animation.common.model.*
 import org.slf4j.LoggerFactory
+import java.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 class ControllerClient(private val controllerHost: String,
                        private val controllerPort: Int,
@@ -24,6 +28,7 @@ class ControllerClient(private val controllerHost: String,
     private val client = HttpClient {
         install(WebSockets) {
             maxFrameSize = Long.MAX_VALUE
+            pingInterval = 500L
             contentConverter = KotlinxWebsocketSerializationConverter(json)
         }
     }
@@ -31,15 +36,33 @@ class ControllerClient(private val controllerHost: String,
     private var endpoint: AnimationEndpoint<*>? = null
 
     suspend fun start() {
-        val session = client.webSocketSession(method = HttpMethod.Get, host = controllerHost, port = controllerPort, path = "/animation")
         while (true) {
-            for (frame in session.incoming) {
-                when (frame.frameType) {
-                    FrameType.TEXT -> handleCommand(frame as Frame.Text, session)
-                    FrameType.CLOSE -> handleFrameClose()
-                    FrameType.BINARY, FrameType.PING, FrameType.PONG -> continue
+            val session = try {
+                client.webSocketSession(
+                    method = HttpMethod.Get,
+                    host = controllerHost,
+                    port = controllerPort,
+                    path = "/animation"
+                )
+            }
+            catch (e: Exception) {
+                log.error("Error in setting up connection", e)
+                null
+            }
+            session?.let {
+                while (it.isActive) {
+                    for (frame in it.incoming) {
+                        when (frame.frameType) {
+                            FrameType.TEXT -> handleCommand(frame as Frame.Text, it)
+                            FrameType.CLOSE -> handleFrameClose()
+                            FrameType.PING, FrameType.PONG -> log.info("Ping? Pong? ${frame.frameType}")
+                            FrameType.BINARY -> continue
+                        }
+                    }
                 }
             }
+            log.info("Connection died. Retrying in 15 seconds")
+            delay(15.seconds)
         }
     }
 

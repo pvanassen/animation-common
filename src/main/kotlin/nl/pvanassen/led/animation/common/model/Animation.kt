@@ -1,8 +1,9 @@
 package nl.pvanassen.led.animation.common.model
 
 interface Animation<T> {
+    fun getFrame(seed: Long, frame:Int, nsPerFrame:Int): ByteArray
 
-    fun getFrame(seed: Long, frame:Int, nsPerFrame:Int, helper:T): ByteArray
+    fun getFrame(seed: Long, frame:Int, nsPerFrame:Int, helper:T) = getFrame(seed, frame, nsPerFrame)
 
     fun isFixedTimeAnimation():Boolean = false
 
