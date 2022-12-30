@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.*
+import io.ktor.server.config.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.reduce
@@ -19,7 +20,8 @@ import kotlin.time.Duration.Companion.seconds
 
 class ControllerClient(private val controllerHost: String,
                        private val controllerPort: Int,
-                       private val animationFactory: AnimationFactory<*>) {
+                       private val animationFactory: AnimationFactory<*>,
+                       private val config: ApplicationConfig) {
 
     private val json = kotlinx.serialization.json.Json
 
@@ -76,7 +78,7 @@ class ControllerClient(private val controllerHost: String,
         log.info("Received message of type {}", type)
         if (type == "welcome") {
             handleWelcome(json.decodeFromString(text.readText()))
-            session.sendSerialized(Message("registration", animationFactory.getRegistrationInfo()))
+            session.sendSerialized(Message("registration", animationFactory.getRegistrationInfo(config)))
         } else if (type == "request-animation") {
             val requestAnimation = json.decodeFromString<Message<RequestAnimation>>(text.readText())
             endpoint?.let {

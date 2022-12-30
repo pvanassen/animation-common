@@ -11,6 +11,6 @@ object Context {
     private val animationFactoryClass = Class.forName(config.property("app.animation-factory").getString())
     private val animationFactory = animationFactoryClass.getDeclaredConstructor().newInstance() as AnimationFactory<*>
 
-    val controllerClient = ControllerClient(controllerHost, controllerPort, animationFactory)
+    val controllerClient = ControllerClient(controllerHost, controllerPort, animationFactory, config)
 
 }
