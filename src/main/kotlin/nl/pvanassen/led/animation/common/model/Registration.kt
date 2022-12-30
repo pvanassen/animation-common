@@ -34,5 +34,10 @@ enum class AnimationType {
     /**
      * Only run at specific times. Requires a cron spec
      */
-    TIMED
+    TIMED,
+
+    /**
+     * A little gimmick
+     */
+    FIREWORKS
 }
