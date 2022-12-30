@@ -8,6 +8,6 @@ interface AnimationFactory<T> {
                      pixels: List<Int>,
                      config: ApplicationConfig
     ): Animation<T>
-    
-    fun getRegistrationInfo(config: ApplicationConfig)
+
+    fun getRegistrationInfo(config: ApplicationConfig): Registration
 }
