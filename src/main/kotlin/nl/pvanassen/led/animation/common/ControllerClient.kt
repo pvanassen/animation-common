@@ -9,13 +9,11 @@ import io.ktor.websocket.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.reduce
 import kotlinx.coroutines.isActive
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import nl.pvanassen.led.animation.common.canvas.Canvas
 import nl.pvanassen.led.animation.common.model.*
 import org.slf4j.LoggerFactory
-import java.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 class ControllerClient(private val controllerHost: String,
@@ -41,13 +39,12 @@ class ControllerClient(private val controllerHost: String,
         while (true) {
             val session = try {
                 client.webSocketSession(
-                    method = HttpMethod.Get,
-                    host = controllerHost,
-                    port = controllerPort,
-                    path = "/animation"
+                        method = HttpMethod.Get,
+                        host = controllerHost,
+                        port = controllerPort,
+                        path = "/animation"
                 )
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 log.error("Error in setting up connection", e)
                 null
             }
@@ -84,10 +81,9 @@ class ControllerClient(private val controllerHost: String,
             endpoint?.let {
                 try {
                     val frames = it.animate(requestAnimation.payload.seconds, requestAnimation.payload.fps)
-                        .reduce { acc, value -> acc + value }
+                            .reduce { acc, value -> acc + value }
                     session.send(frames)
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     log.warn("Error sending frame", e)
                     throw e
                 }

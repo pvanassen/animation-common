@@ -17,12 +17,12 @@ class Canvas(private val mask: BufferedImage,
     init {
         // getRGB returns int in TYPE_INT_ARGB
         val positionsList = (0 until mask.width)
-            .flatMap { x ->
-                (0 until mask.height)
-                    .map { y -> Triple(x, y, mask.getRGB(x, y) and 0xFFFFFF) }
-            }
-            .filter { it.third != 0 }
-            .map { Position(it.third shr 16 and 0xFF, it.third and 0xFF, it.first, it.second) }
+                .flatMap { x ->
+                    (0 until mask.height)
+                            .map { y -> Triple(x, y, mask.getRGB(x, y) and 0xFFFFFF) }
+                }
+                .filter { it.third != 0 }
+                .map { Position(it.third shr 16 and 0xFF, it.third and 0xFF, it.first, it.second) }
         positions = Positions(positionsList, pixels)
     }
 
@@ -85,14 +85,14 @@ class Canvas(private val mask: BufferedImage,
 
         init {
             raster = (0..pixelStrips.size).map { strip ->
-                Pair(strip, positions.filter { it -> it.strip == strip })
+                Pair(strip, positions.filter { it.strip == strip })
             }
-                .map { stripPositions ->
-                    stripPositions.second
-                        .filter { it.pixel in (0..pixelStrips[stripPositions.first]) }
-                        .sortedBy { it.pixel }
-                        .toTypedArray()
-                }.toTypedArray()
+                    .map { stripPositions ->
+                        stripPositions.second
+                                .filter { it.pixel in (0..pixelStrips[stripPositions.first]) }
+                                .sortedBy { it.pixel }
+                                .toTypedArray()
+                    }.toTypedArray()
         }
 
         fun getX(strip: Int, pixel: Int): Int {

@@ -67,38 +67,81 @@
   },
   {
     "name": "io.ktor.utils.io.pool.DefaultPool",
-    "fields" : [ { "name" : "top", "allowUnsafeAccess" : true } ]
+    "fields": [
+      {
+        "name": "top",
+        "allowUnsafeAccess": true
+      }
+    ]
   },
   {
-    "name":"nl.pvanassen.led.animation.common.model.Message",
-    "fields":[{"name":"Companion"}]
+    "name": "nl.pvanassen.led.animation.common.model.Message",
+    "fields": [
+      {
+        "name": "Companion"
+      }
+    ]
   },
   {
-    "name":"nl.pvanassen.led.animation.common.model.Message$Companion",
-    "methods":[{"name":"serializer","parameterTypes":["kotlinx.serialization.KSerializer"] }]
+    "name": "nl.pvanassen.led.animation.common.model.Message$Companion",
+    "methods": [
+      {
+        "name": "serializer",
+        "parameterTypes": [
+          "kotlinx.serialization.KSerializer"
+        ]
+      }
+    ]
   },
   {
-    "name":"nl.pvanassen.led.animation.common.model.Registration",
-    "fields":[{"name":"Companion"}]
+    "name": "nl.pvanassen.led.animation.common.model.Registration",
+    "fields": [
+      {
+        "name": "Companion"
+      }
+    ]
   },
   {
-    "name":"nl.pvanassen.led.animation.common.model.Registration$Companion",
-    "methods":[{"name":"serializer","parameterTypes":[] }]
+    "name": "nl.pvanassen.led.animation.common.model.Registration$Companion",
+    "methods": [
+      {
+        "name": "serializer",
+        "parameterTypes": []
+      }
+    ]
   },
   {
-    "name":"nl.pvanassen.led.animation.common.model.RequestAnimation",
-    "fields":[{"name":"Companion"}]
+    "name": "nl.pvanassen.led.animation.common.model.RequestAnimation",
+    "fields": [
+      {
+        "name": "Companion"
+      }
+    ]
   },
   {
-    "name":"nl.pvanassen.led.animation.common.model.RequestAnimation$Companion",
-    "methods":[{"name":"serializer","parameterTypes":[] }]
+    "name": "nl.pvanassen.led.animation.common.model.RequestAnimation$Companion",
+    "methods": [
+      {
+        "name": "serializer",
+        "parameterTypes": []
+      }
+    ]
   },
   {
-    "name":"nl.pvanassen.led.animation.common.model.StartClient",
-    "fields":[{"name":"Companion"}]
+    "name": "nl.pvanassen.led.animation.common.model.StartClient",
+    "fields": [
+      {
+        "name": "Companion"
+      }
+    ]
   },
   {
-    "name":"nl.pvanassen.led.animation.common.model.StartClient$Companion",
-    "methods":[{"name":"serializer","parameterTypes":[] }]
+    "name": "nl.pvanassen.led.animation.common.model.StartClient$Companion",
+    "methods": [
+      {
+        "name": "serializer",
+        "parameterTypes": []
+      }
+    ]
   }
 ]

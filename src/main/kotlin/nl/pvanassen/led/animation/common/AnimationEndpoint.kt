@@ -1,7 +1,10 @@
 package nl.pvanassen.led.animation.common
 
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import nl.pvanassen.led.animation.common.model.Animation
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -29,25 +32,25 @@ class AnimationEndpoint<T>(val animation: Animation<T>) {
         }
     }
 
-    @OptIn(FlowPreview::class)
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun getAnimation(frames: Int, seed: Long, nsPerFrame: Int): Flow<ByteArray> {
         val state = animation.getStateObject()
         return flow { emit(frames) }
-            .flatMapConcat { getFrames(seed, it, nsPerFrame, state) }
+                .flatMapConcat { getFrames(seed, it, nsPerFrame, state) }
     }
 
-    @OptIn(FlowPreview::class)
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun getFixedTimeAnimation(seed: Long, nsPerFrame: Int, state: T): Flow<ByteArray> =
-        flow { emit(animation.getFixedTimeAnimationFrames(state)) }
-            .flatMapConcat { getFrames(seed, it, nsPerFrame, state) }
+            flow { emit(animation.getFixedTimeAnimationFrames(state)) }
+                    .flatMapConcat { getFrames(seed, it, nsPerFrame, state) }
 
     private fun getFrames(seed: Long, frames: Int, nsPerFrame: Int, helperObject: T): Flow<ByteArray> =
-        flow {
-            (0 until frames).forEach {
-                emit(it)
+            flow {
+                (0 until frames).forEach {
+                    emit(it)
+                }
             }
-        }
-            .map {
-                animation.getFrame(seed, it, nsPerFrame, helperObject)
-            }
+                    .map {
+                        animation.getFrame(seed, it, nsPerFrame, helperObject)
+                    }
 }
