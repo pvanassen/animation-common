@@ -14,7 +14,7 @@
 
         <junit.version>5.10.0</junit.version>
         <assertj.version>3.24.2</assertj.version>
-        <logback.version>1.4.11</logback.version>
+        <logback.version>1.4.12</logback.version>
         <slf4j.version>2.0.9</slf4j.version>
         <ktor.version>2.3.5</ktor.version>
 
